@@ -1,7 +1,6 @@
 package org.hibernate.bugs;
 
-
-import java.util.List;
+import java.sql.SQLException;
 
 import org.hibernate.Session;
 import org.junit.After;
@@ -11,52 +10,43 @@ import org.junit.Test;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import jakarta.persistence.Query;
 
 /**
- * This template demonstrates how to develop a test case for Hibernate ORM, using the Java Persistence API.
+ * This template demonstrates how to develop a test case for Hibernate ORM,
+ * using the Java Persistence API.
  */
 public class SMPJPAUnitTestCase {
 
 	private EntityManagerFactory entityManagerFactory;
 
 	@Before
-	public void init() {
-		entityManagerFactory = Persistence.createEntityManagerFactory( "templatePU" );
+	public void init() throws SQLException {
+		entityManagerFactory = Persistence.createEntityManagerFactory("templatePU");
 	}
 
 	@After
 	public void destroy() {
-		entityManagerFactory.close();
+		 //entityManagerFactory.close();
 	}
 
-	// Entities are auto-discovered, so just add them anywhere on class-path
-	// Add your tests, using standard JUnit.
 	@Test
-	//@Ignore
 	public void smpTest() throws Exception {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		Session session = entityManager.unwrap(Session.class);
-
-		org.hibernate.query.Query q = session.createNativeQuery("select count(*) from SMPSESSION", Object.class);
-		System.out.println("result======" + q.getResultList());
-		System.out.println("result======" + ((Number) q.uniqueResult()).longValue());
+		session.getTransaction().begin();
+		Subscriber s1 = new Subscriber();
+		s1.setId((long) 1);
+		s1.setAccountNumber("account1");
+		s1.setValue("value1");
+		//s1.setUservalue("value1");
+		//s1.setUservalue_clob("value2222221");
+		session.save(s1);
 		
-		Query q2 = session.createNativeQuery("select creationdate, subscriberid from SMPSESSION", Object[].class);
-		List<Object[]> results = q2.getResultList();
-		System.out.println("result 2======" + results);
-		System.out.println("result 2:0th element======creationdate=" + results.get(0)[0] + ", subscriberid=" + results.get(0)[1]);
-		
-		org.hibernate.query.Query<Subscriber> cq = session.createQuery("from Subscriber ", Subscriber.class);
-		List<Subscriber> cqresult = cq.getResultList();
-		System.out.println("result cq======" + cqresult);
-		System.out.println("result cq:0th element======subscriberid=" + cqresult.get(0).getAccountNumber());
+//		org.hibernate.query.Query<Subscriber> cq = session.createQuery("from test_subscriber ", Subscriber.class);
+//		List<Subscriber> cqresult = cq.getResultList();
+//		System.out.println("result cq======" + cqresult);
+//		System.out.println("result cq:0th element======subscriberid=" + cqresult.get(0).getAccountNumber());
 
-		entityManager.close();
 	}
-	
-	
-	
-	
-	
+
 }
