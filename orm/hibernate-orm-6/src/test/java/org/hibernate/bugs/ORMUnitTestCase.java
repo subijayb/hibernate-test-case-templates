@@ -22,6 +22,8 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.testing.junit4.BaseCoreFunctionalTestCase;
 import org.junit.Test;
 
+import jakarta.persistence.EntityManager;
+
 /**
  * This template demonstrates how to develop a test case for Hibernate ORM, using its built-in unit test framework.
  * Although ORMStandaloneTestCase is perfectly acceptable as a reproducer, usage of this class is much preferred.
@@ -75,5 +77,11 @@ public class ORMUnitTestCase extends BaseCoreFunctionalTestCase {
 		// Do stuff...
 		tx.commit();
 		s.close();
+		
+		try(Session s2 = openSession();
+				EntityManager entityManager = s2.getEntityManagerFactory().createEntityManager();) {
+			
+		}
+		
 	}
 }
