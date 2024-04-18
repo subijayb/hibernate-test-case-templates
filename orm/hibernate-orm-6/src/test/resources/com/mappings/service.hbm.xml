@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="org.hibernate.bugs.Subscriber"
+        table="test_subscriber" >
+        <id name="id" column="id" type="java.lang.Long"> 
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+        		<param name="sequence_name">TEST_SUBSCRIBER_SEQ</param>
+        		<param name="optimizer">motive.hibernate.MotiveHiLoOptimizer</param>
+        		<param name="increment_size">500</param>
+      		</generator> 	  
+        </id>
+        
+        <property name="tenantid" column="tenantid" type="java.lang.Long" />
+        <property name="creationDate" column="creationdate" type="timestamp"/>
+        <property name="accountNumber" column="accountnumber" type="string" />
+        
+    </class>
+
+</hibernate-mapping>
